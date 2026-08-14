@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sensor Dashboard</title>
+  <style>
+    body { font-family: Arial; background:#111; color:white; }
+    .card {
+      padding: 12px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+    .RED { background: red; }
+    .ORANGE { background: orange; }
+    .GREEN { background: green; }
+  </style>
+</head>
+
+<body>
+
+<h2>Live Sensor Data</h2>
+<div id="data"></div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzBUXVzQMcAtaf3ZwkjqpJxeoz5bSB2B3lovf42ST6FWkj-IACup8rHfOnMg9jkOAowkQ/exec";
+
+function loadData() {
+  fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+
+    let container = document.getElementById("data");
+    container.innerHTML = "";
+
+    data.reverse().forEach(row => {
+      let div = document.createElement("div");
+      div.className = "card " + row.status;
+
+      div.innerHTML = `
+        <b>${row.sensor}</b><br>
+        Value: ${row.value}<br>
+        Status: ${row.status}
+      `;
+
+      container.appendChild(div);
+    });
+  });
+}
+
+setInterval(loadData, 5000);
+loadData();
+</script>
+
+</body>
+</html>
